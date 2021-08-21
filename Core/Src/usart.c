@@ -19,9 +19,9 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "usart.h"
-
-/* USER CODE BEGIN 0 */
 uint8_t uart1_buf[18] = {0};/* 遥控器 @定长18个8字节的数据 */
+/* USER CODE BEGIN 0 */
+
 /* USER CODE END 0 */
 
 UART_HandleTypeDef huart1;
@@ -138,7 +138,18 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
-
+void uart1_dma_callback(DMA_HandleTypeDef *hdma)
+{
+   //shaodongxi
+}
+void UART1_RemoteStart(void)
+{
+    HAL_DMA_RegisterCallback(&hdma_usart1_rx,HAL_DMA_XFER_CPLT_CB_ID,uart1_dma_callback);
+    
+    SET_BIT(huart1.Instance->CR3, USART_CR3_DMAR);
+    HAL_DMA_Start_IT(&hdma_usart1_rx, (uint32_t)(&USART1->DR), \
+    (uint32_t)&uart1_buf[0], 18);
+}
 /* USER CODE END 1 */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

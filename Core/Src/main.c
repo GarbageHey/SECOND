@@ -24,7 +24,7 @@
 #include "dma.h"
 #include "usart.h"
 #include "gpio.h"
-uint8_t uart1_buf[18] = {0};/* 遥控器 @定长18个8字节的数据 */
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 

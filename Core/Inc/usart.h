@@ -14,7 +14,7 @@
   * the License. You may obtain a copy of the License at:
   *                             www.st.com/SLA0044
   *
-  ******************************************************************************
+  ******************************* 	***********************************************
   */
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __USART_H__
@@ -40,7 +40,7 @@ extern UART_HandleTypeDef huart1;
 void MX_USART1_UART_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-
+extern uint8_t uart1_buf[18];  // add1
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus
