@@ -26,7 +26,14 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "usart.h"
+#include "tim.h"
+#include "message.h"
+#include "judge.h"
+#include "vision.h"
+#include "holder.h"
+#include "chassis.h"
+#include "shoot.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -46,9 +53,9 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
-
+osEvent evt;
 /* USER CODE END Variables */
-osThreadId task1Handle;
+osThreadId task1Handle;   /*Msg*/
 osThreadId task2Handle;
 osMessageQId queue1Handle;
 
@@ -57,8 +64,8 @@ osMessageQId queue1Handle;
 
 /* USER CODE END FunctionPrototypes */
 
-void StartDefaultTask(void const * argument);
-void StartTask02(void const * argument);
+void StartDefaultTask(void const * argument);      /*Msg*/
+void StartTask02(void const * argument);           /*   */
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -137,7 +144,15 @@ void StartDefaultTask(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+		        RemoteData_t RDMsg;
+        HolderData_t HDMsg;
+        RemoteDataMsg_Process(&RDMsg);
+        HolderDataMsg_Process(&HDMsg);
+        osMessagePut(RDtHMsgHandle, (uint32_t)&RDMsg, 0);
+        osMessagePut(RDtCMsgHandle, (uint32_t)&RDMsg, 0);
+        osMessagePut(HDtHMsgHandle, (uint32_t)&HDMsg, 0);
+        osMessagePut(RDtSMsgHandle, (uint32_t)&RDMsg, 0);
+    osDelay(10);
   }
   /* USER CODE END StartDefaultTask */
 }

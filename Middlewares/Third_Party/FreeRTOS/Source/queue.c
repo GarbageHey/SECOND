@@ -372,12 +372,18 @@ Queue_t * const pxQueue = xQueue;
 	uint8_t *pucQueueStorage;
 
 		configASSERT( uxQueueLength > ( UBaseType_t ) 0 );
-
+    		if( uxItemSize == ( UBaseType_t ) 0 )
+		{
+			/* There is not going to be a queue storage area. */
+			xQueueSizeInBytes = ( size_t ) 0;
+		}
+		else
+		{
 		/* Allocate enough space to hold the maximum number of items that
 		can be in the queue at any time.  It is valid for uxItemSize to be
 		zero in the case the queue is used as a semaphore. */
 		xQueueSizeInBytes = ( size_t ) ( uxQueueLength * uxItemSize ); /*lint !e961 MISRA exception as the casts are only redundant for some ports. */
-
+		}
 		/* Allocate the queue and storage area.  Justification for MISRA
 		deviation as follows:  pvPortMalloc() always ensures returned memory
 		blocks are aligned per the requirements of the MCU stack.  In this case

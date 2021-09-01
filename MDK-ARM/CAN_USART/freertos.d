@@ -46,3 +46,15 @@ can_usart\freertos.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.
 can_usart\freertos.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h
 can_usart\freertos.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h
 can_usart\freertos.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h
+can_usart\freertos.o: ../Core/Inc/usart.h
+can_usart\freertos.o: ..\ADD\include\tim.h
+can_usart\freertos.o: ..\ADD\include\main.h
+can_usart\freertos.o: ..\ADD\include\message.h
+can_usart\freertos.o: ..\ADD\include\motor.h
+can_usart\freertos.o: ..\ADD\include\pid.h
+can_usart\freertos.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+can_usart\freertos.o: ..\ADD\include\judge.h
+can_usart\freertos.o: ..\ADD\include\judge_rx.h
+can_usart\freertos.o: ..\ADD\include\stdint.h
+can_usart\freertos.o: ..\ADD\include\dma_unpack.h
+can_usart\freertos.o: ..\ADD\include\data_fifo.h
