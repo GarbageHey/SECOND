@@ -31,29 +31,13 @@
 #include "motor.h"
 #include "pid.h"
 /* typedef -------------------------------------------------------------------*/
-typedef struct _MoveData_t
-{
-    int16_t Right;    
-    int16_t Front;
-    int16_t ClockWise;
-}MoveData_t;
 
-typedef struct _SuperCap_t
-{
-    uint16_t InVol;
-    uint16_t CapVol;
-    uint16_t InCur;
-    uint16_t Power;
-    uint16_t TargetPower;
-    uint8_t  CanData[8];
-}SuperCap_t;
 
 typedef struct _Chassis_t
 {
-    M3508_t M3508[4];
+    M3508_t m3508;
     uint8_t CanData[8];
-    SuperCap_t SuperCap;
-    MoveData_t MoveData;
+
 }Chassis_t;
 
 /* define --------------------------------------------------------------------*/

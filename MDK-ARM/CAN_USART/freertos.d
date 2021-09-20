@@ -58,3 +58,8 @@ can_usart\freertos.o: ..\ADD\include\judge_rx.h
 can_usart\freertos.o: ..\ADD\include\stdint.h
 can_usart\freertos.o: ..\ADD\include\dma_unpack.h
 can_usart\freertos.o: ..\ADD\include\data_fifo.h
+can_usart\freertos.o: ..\ADD\include\protocol.h
+can_usart\freertos.o: ..\ADD\include\stdio.h
+can_usart\freertos.o: ..\ADD\include\usart.h
+can_usart\freertos.o: ..\ADD\include\holder.h
+can_usart\freertos.o: ..\ADD\include\chassis.h

@@ -30,10 +30,9 @@
 #include "tim.h"
 #include "message.h"
 #include "judge.h"
-#include "vision.h"
 #include "holder.h"
 #include "chassis.h"
-#include "shoot.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -55,7 +54,7 @@
 /* USER CODE BEGIN Variables */
 osEvent evt;
 /* USER CODE END Variables */
-osThreadId task1Handle;   /*Msg*/
+osThreadId task1Handle;
 osThreadId task2Handle;
 osMessageQId queue1Handle;
 
@@ -64,8 +63,8 @@ osMessageQId queue1Handle;
 
 /* USER CODE END FunctionPrototypes */
 
-void StartDefaultTask(void const * argument);      /*Msg*/
-void StartTask02(void const * argument);           /*   */
+void StartDefaultTask(void const * argument);
+void StartTask02(void const * argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -118,11 +117,11 @@ void MX_FREERTOS_Init(void) {
 
   /* Create the thread(s) */
   /* definition and creation of task1 */
-  osThreadDef(task1, StartDefaultTask, osPriorityNormal, 0, 128);
+  osThreadDef(task1, StartDefaultTask, osPriorityHigh, 0, 128);
   task1Handle = osThreadCreate(osThread(task1), NULL);
 
   /* definition and creation of task2 */
-  osThreadDef(task2, StartTask02, osPriorityIdle, 0, 128);
+  osThreadDef(task2, StartTask02, osPriorityRealtime, 0, 128);
   task2Handle = osThreadCreate(osThread(task2), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
@@ -138,20 +137,16 @@ void MX_FREERTOS_Init(void) {
   * @retval None
   */
 /* USER CODE END Header_StartDefaultTask */
+
 void StartDefaultTask(void const * argument)
 {
   /* USER CODE BEGIN StartDefaultTask */
   /* Infinite loop */
   for(;;)
   {
-		        RemoteData_t RDMsg;
-        HolderData_t HDMsg;
+		    RemoteData_t RDMsg;
         RemoteDataMsg_Process(&RDMsg);
-        HolderDataMsg_Process(&HDMsg);
-        osMessagePut(RDtHMsgHandle, (uint32_t)&RDMsg, 0);
-        osMessagePut(RDtCMsgHandle, (uint32_t)&RDMsg, 0);
-        osMessagePut(HDtHMsgHandle, (uint32_t)&HDMsg, 0);
-        osMessagePut(RDtSMsgHandle, (uint32_t)&RDMsg, 0);
+        osMessagePut(queue1Handle, (uint32_t)&RDMsg, 0);
     osDelay(10);
   }
   /* USER CODE END StartDefaultTask */
@@ -164,12 +159,23 @@ void StartDefaultTask(void const * argument)
 * @retval None
 */
 /* USER CODE END Header_StartTask02 */
+ RemoteData_t tmp;
 void StartTask02(void const * argument)
 {
   /* USER CODE BEGIN StartTask02 */
+	/* pid初始化*/
+	 RemoteData_t *RDMsg;
   /* Infinite loop */
+
   for(;;)
   {
+		/*pid更新*/
+		evt = osMessageGet(queue1Handle,0);
+		if(evt.status == osEventMessage)
+		{
+				RDMsg = (RemoteData_t*)evt.value.v;
+        tmp = *RDMsg;
+		} 
     osDelay(1);
   }
   /* USER CODE END StartTask02 */

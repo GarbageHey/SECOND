@@ -87,34 +87,6 @@ void RemoteDataMsg_Process(RemoteData_t *RDMsg)
     RDMsg->KeyBoard.b     = (RDMsg->Key & KEY_PRESSED_OFFSET_B)>>15; 
 }
 
-static float IMUAngle_Continue(Mcircle_t *mc_imu,float imu_angle)
-{
-	float out_data = 0; 
 
-	Circle_Continue(mc_imu, (imu_angle + 180.0f) * 22.7555556f);
-	out_data = 819 * (float)(mc_imu->Circle + (float)(mc_imu->Angle) / 8192);
-
-	return out_data;    
-}
-
-void HolderDataMsg_Process(HolderData_t *HDMsg)
-{
-    get_eular(Eular);
-    
-    HDMsg->Angle[2] = IMUAngle_Continue(&mc_imu_yaw,Eular[2]);
-    HDMsg->Angle[0] = IMUAngle_Continue(&mc_imu_pitch,Eular[0]);
-    
-    get_raw_gyo(Gyro);
-    HDMsg->Gyro[2] = -(Gyro[2]);
-    HDMsg->Gyro[0] = -Gyro[0];
-}
-
-
-/*********************************ÏûÏ¢¸¨Öúº¯Êý*********************************/
-
-Mcircle_t* Get_Mc_Imu_Pitch(void)
-{
-    return &mc_imu_pitch;
-}
 
 /************************ (C) COPYRIGHT CSU_RM_FYT *************END OF FILE****/

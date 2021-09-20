@@ -40,6 +40,7 @@
 "can_usart\message.o"
 "can_usart\motor.o"
 "can_usart\pid.o"
+"can_usart\chasis.o"
 --library_type=microlib --strict --scatter "CAN_USART\CAN_USART.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

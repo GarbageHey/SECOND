@@ -19,7 +19,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "can.h"
-#include "usart.h"
 
 /* USER CODE BEGIN 0 */
 #define CAN1_FIFO CAN_RX_FIFO0
@@ -59,7 +58,6 @@ void MX_CAN1_Init(void)
   /* USER CODE END CAN1_Init 2 */
 
 }
-static uint32_t HAL_RCC_CAN1_CLK_ENABLED=0;   //ADD2
 
 void HAL_CAN_MspInit(CAN_HandleTypeDef* canHandle)
 {
@@ -71,10 +69,7 @@ void HAL_CAN_MspInit(CAN_HandleTypeDef* canHandle)
 
   /* USER CODE END CAN1_MspInit 0 */
     /* CAN1 clock enable */
-		HAL_RCC_CAN1_CLK_ENABLED++;
-		if(HAL_RCC_CAN1_CLK_ENABLED==1){
     __HAL_RCC_CAN1_CLK_ENABLE();
-		}
 
     __HAL_RCC_GPIOA_CLK_ENABLE();
     /**CAN1 GPIO Configuration
@@ -95,7 +90,6 @@ void HAL_CAN_MspInit(CAN_HandleTypeDef* canHandle)
     HAL_NVIC_EnableIRQ(CAN1_RX0_IRQn);
   /* USER CODE END CAN1_MspInit 1 */
   }
-	
 }
 
 void HAL_CAN_MspDeInit(CAN_HandleTypeDef* canHandle)
@@ -107,10 +101,8 @@ void HAL_CAN_MspDeInit(CAN_HandleTypeDef* canHandle)
 
   /* USER CODE END CAN1_MspDeInit 0 */
     /* Peripheral clock disable */
-    HAL_RCC_CAN1_CLK_ENABLED--;
-    if(HAL_RCC_CAN1_CLK_ENABLED==0){
-      __HAL_RCC_CAN1_CLK_DISABLE();
-    }
+    __HAL_RCC_CAN1_CLK_DISABLE();
+
     /**CAN1 GPIO Configuration
     PA11     ------> CAN1_RX
     PA12     ------> CAN1_TX
