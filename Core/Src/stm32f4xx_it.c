@@ -22,6 +22,9 @@
 #include "main.h"
 #include "stm32f4xx_it.h"
 /* Private includes ----------------------------------------------------------*/
+#include <string.h>
+#include "tim.h"
+#include "usart.h"
 /* USER CODE BEGIN Includes */
 /* USER CODE END Includes */
 
@@ -59,6 +62,7 @@
 extern DMA_HandleTypeDef hdma_usart1_rx;
 extern UART_HandleTypeDef huart1;
 extern TIM_HandleTypeDef htim6;
+extern CAN_HandleTypeDef hcan1;
 
 /* USER CODE BEGIN EV */
 
@@ -175,6 +179,37 @@ void USART1_IRQHandler(void)
 
   /* USER CODE END USART1_IRQn 1 */
 }
+void CAN1_TX_IRQHandler(void)
+{
+  /* USER CODE BEGIN CAN1_TX_IRQn 0 */
+  Observer.Rx.CAN1_Tx_Rate++;
+  /* USER CODE END CAN1_TX_IRQn 0 */
+  HAL_CAN_IRQHandler(&hcan1);
+  /* USER CODE BEGIN CAN1_TX_IRQn 1 */
+
+  /* USER CODE END CAN1_TX_IRQn 1 */
+}
+
+/**
+  * @brief This function handles CAN1 RX0 interrupts.
+  */
+void CAN1_RX0_IRQHandler(void)
+{
+  /* USER CODE BEGIN CAN1_RX0_IRQn 0 */
+
+  /* USER CODE END CAN1_RX0_IRQn 0 */
+  HAL_CAN_IRQHandler(&hcan1);
+  /* USER CODE BEGIN CAN1_RX0_IRQn 1 */
+
+  /* USER CODE END CAN1_RX0_IRQn 1 */
+}
+
+/**
+  * @brief This function handles USART1 global interrupt.
+  */
+
+
+
 
 /**
   * @brief This function handles TIM6 global interrupt, DAC1 and DAC2 underrun error interrupts.

@@ -29,8 +29,8 @@
 #include "usart.h"
 #include "tim.h"
 #include "message.h"
-#include "judge.h"
-#include "holder.h"
+
+
 #include "chassis.h"
 
 /* USER CODE END Includes */
@@ -108,7 +108,7 @@ void MX_FREERTOS_Init(void) {
 
   /* Create the queue(s) */
   /* definition and creation of queue1 */
-  osMessageQDef(queue1, 16, uint16_t);
+  osMessageQDef(queue1, 16, uint32_t);
   queue1Handle = osMessageCreate(osMessageQ(queue1), NULL);
 
   /* USER CODE BEGIN RTOS_QUEUES */
@@ -121,7 +121,7 @@ void MX_FREERTOS_Init(void) {
   task1Handle = osThreadCreate(osThread(task1), NULL);
 
   /* definition and creation of task2 */
-  osThreadDef(task2, StartTask02, osPriorityRealtime, 0, 128);
+  osThreadDef(task2, StartTask02, osPriorityRealtime, 0, 512);
   task2Handle = osThreadCreate(osThread(task2), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
@@ -137,7 +137,6 @@ void MX_FREERTOS_Init(void) {
   * @retval None
   */
 /* USER CODE END Header_StartDefaultTask */
-
 void StartDefaultTask(void const * argument)
 {
   /* USER CODE BEGIN StartDefaultTask */
@@ -159,7 +158,7 @@ void StartDefaultTask(void const * argument)
 * @retval None
 */
 /* USER CODE END Header_StartTask02 */
- RemoteData_t tmp;
+RemoteData_t tmp;
 void StartTask02(void const * argument)
 {
   /* USER CODE BEGIN StartTask02 */
@@ -176,6 +175,7 @@ void StartTask02(void const * argument)
 				RDMsg = (RemoteData_t*)evt.value.v;
         tmp = *RDMsg;
 		} 
+		Chassis_Process(*RDMsg);
     osDelay(1);
   }
   /* USER CODE END StartTask02 */

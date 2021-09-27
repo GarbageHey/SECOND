@@ -19,9 +19,11 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "usart.h"
-
+#include "tim.h"
 /* USER CODE BEGIN 0 */
 uint8_t uart1_buf[18] = {0};/* 遥控器 @定长18个8字节的数据 */
+uint8_t uart_tmp = 0;/* 工具 @使能中断 @IMU的实参 */
+obser_t Observer = {0};
 /* USER CODE END 0 */
 
 UART_HandleTypeDef huart1;
@@ -91,7 +93,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     hdma_usart1_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
     hdma_usart1_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
     hdma_usart1_rx.Init.Mode = DMA_NORMAL;
-    hdma_usart1_rx.Init.Priority = DMA_PRIORITY_LOW;
+    hdma_usart1_rx.Init.Priority = DMA_PRIORITY_VERY_HIGH;
     hdma_usart1_rx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
     if (HAL_DMA_Init(&hdma_usart1_rx) != HAL_OK)
     {
@@ -138,18 +140,36 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+    /* Prevent unused argument(s) compilation warning */
+    UNUSED(huart);
+    /* NOTE: This function should not be modified, when the callback is needed,
+             the HAL_UART_RxCpltCallback could be implemented in the user file
+    */
+		if(huart->Instance == USART1)
+	{
+		HAL_UART_Receive_IT(&huart1, &uart_tmp, 1);
+	}
+
+
+
+}
+
 void uart1_dma_callback(DMA_HandleTypeDef *hdma)
 {
-   //shaodongxi
+   Observer.Rx.DR16_Rate++;
 }
+
 void UART1_RemoteStart(void)
 {
     HAL_DMA_RegisterCallback(&hdma_usart1_rx,HAL_DMA_XFER_CPLT_CB_ID,uart1_dma_callback);
-    
+   
     SET_BIT(huart1.Instance->CR3, USART_CR3_DMAR);
     HAL_DMA_Start_IT(&hdma_usart1_rx, (uint32_t)(&USART1->DR), \
     (uint32_t)&uart1_buf[0], 18);
 }
+
 /* USER CODE END 1 */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
