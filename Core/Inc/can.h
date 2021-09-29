@@ -43,6 +43,7 @@ void MX_CAN2_Init(void);
 
 /* USER CODE BEGIN Prototypes */
 void CAN1_FilterInit(void);
+void CAN1_Transmit(uint16_t ID,uint8_t *pData);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

@@ -58,10 +58,12 @@ typedef struct _M3508_t
 {
     int16_t TarSpeed;
     int16_t TarCurrent;
+		int16_t TarPosition;
     MotorData_t Rx;
     MotorData_t LPf;
     PID_IncrementType PidSpeed;
     PID_IncrementType PidCurrent;
+		PID_AbsoluteType PidPosition;
     int16_t Output;
 }M3508_t;
 
