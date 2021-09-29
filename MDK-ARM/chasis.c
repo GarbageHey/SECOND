@@ -31,7 +31,7 @@
 #include "judge.h"
 #include "judge_tx.h"
 #include "ui.h"
-#include "FreeRTOS.h"
+#include "freertos.h"
 #include "task.h"
 /* typedef -------------------------------------------------------------------*/
 /* define --------------------------------------------------------------------*/
@@ -45,7 +45,7 @@
 
 /* variables -----------------------------------------------------------------*/
 Chassis_t Chassis = {0};
-
+int16_t front_temp,right_temp;
 /* function ------------------------------------------------------------------*/
 
 
@@ -71,7 +71,11 @@ void Chassis_Init(void)
     }
 }
 
-
+void Remote_Control_GetMoveData(RemoteData_t RDMsg)
+{
+    right_temp = RDMsg.Ch2;
+    front_temp = RDMsg.Ch3;
+}
 /**
   * @brief  获取底盘控制数据
   * @param  遥控器消息结构体
@@ -88,6 +92,28 @@ int16_t chassis_aim_speed[3];
 
 void Chassis_GetMoveData(RemoteData_t RDMsg)
 {
+	    uint8_t i;
+    switch (RDMsg.S1)
+    {
+        case SUP:
+				case SMID:
+        case SDOWN:
+            Remote_Control_GetMoveData(RDMsg);
+        break;
+            
+   
+        default:
+        break;
+    }
+    
+
+    for(i=0; i<3; i++)
+    {
+        chassis_now_speed[i] = chassis_aim_speed[i];
+    }
+    RemoteDataMsg_Process(&RDMsg);
+//    CAN1_Transmit(0x200,Chassis.m3508.TarSpeed);
+	
 /*从遥控器接受指令*/
 //	m3508.TarSpeed
 }
@@ -127,11 +153,8 @@ void Chassis_CanTransmit(void)
 		Chassis.CanData[0]=(uint8_t)(Chassis.m3508.LPf.Output>>8);
 		Chassis.CanData[1]=(uint8_t)(Chassis.m3508.LPf.Output);
  
-    CAN1_Transmit(0x200,Chassis.CanData);
+//    CAN1_Transmit(0x200,Chassis.CanData);
 }
-
-
-
 
 /**
   * @brief  底盘进程
@@ -143,6 +166,7 @@ void Chassis_Process(RemoteData_t RDMsg)
 {
     Chassis_GetMoveData(RDMsg);
     Chassis_PidRun();
+//	  CAN1_Transmit(0x200,Chassis.m3508.TarSpeed);
 	//can 发送
 }
 /************************ (C) COPYRIGHT CSU_RM_FYT *************END OF FILE****/

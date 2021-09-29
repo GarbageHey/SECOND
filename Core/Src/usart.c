@@ -19,8 +19,9 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "usart.h"
-#include "tim.h"
+
 /* USER CODE BEGIN 0 */
+#include "tim.h"
 uint8_t uart1_buf[18] = {0};/* 遥控器 @定长18个8字节的数据 */
 uint8_t uart_tmp = 0;/* 工具 @使能中断 @IMU的实参 */
 obser_t Observer = {0};
@@ -92,7 +93,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     hdma_usart1_rx.Init.MemInc = DMA_MINC_ENABLE;
     hdma_usart1_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
     hdma_usart1_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
-    hdma_usart1_rx.Init.Mode = DMA_NORMAL;
+    hdma_usart1_rx.Init.Mode = DMA_CIRCULAR;
     hdma_usart1_rx.Init.Priority = DMA_PRIORITY_VERY_HIGH;
     hdma_usart1_rx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
     if (HAL_DMA_Init(&hdma_usart1_rx) != HAL_OK)
@@ -103,7 +104,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     __HAL_LINKDMA(uartHandle,hdmarx,hdma_usart1_rx);
 
     /* USART1 interrupt Init */
-    HAL_NVIC_SetPriority(USART1_IRQn, 5, 0);
+    HAL_NVIC_SetPriority(USART1_IRQn, 0, 0);
     HAL_NVIC_EnableIRQ(USART1_IRQn);
   /* USER CODE BEGIN USART1_MspInit 1 */
 
@@ -147,13 +148,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     /* NOTE: This function should not be modified, when the callback is needed,
              the HAL_UART_RxCpltCallback could be implemented in the user file
     */
-		if(huart->Instance == USART1)
-	{
-		HAL_UART_Receive_IT(&huart1, &uart_tmp, 1);
-	}
-
-
-
+		
 }
 
 void uart1_dma_callback(DMA_HandleTypeDef *hdma)

@@ -41,6 +41,7 @@ void MX_USART1_UART_Init(void);
 
 /* USER CODE BEGIN Prototypes */
 extern uint8_t uart1_buf[18];  // add1
+void UART1_RemoteStart(void);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

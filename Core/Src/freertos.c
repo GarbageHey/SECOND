@@ -56,6 +56,7 @@ osEvent evt;
 /* USER CODE END Variables */
 osThreadId task1Handle;
 osThreadId task2Handle;
+osThreadId taskMSGHandle;
 osMessageQId queue1Handle;
 
 /* Private function prototypes -----------------------------------------------*/
@@ -65,6 +66,7 @@ osMessageQId queue1Handle;
 
 void StartDefaultTask(void const * argument);
 void StartTask02(void const * argument);
+void StartTask03(void const * argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -117,12 +119,16 @@ void MX_FREERTOS_Init(void) {
 
   /* Create the thread(s) */
   /* definition and creation of task1 */
-  osThreadDef(task1, StartDefaultTask, osPriorityHigh, 0, 128);
+  osThreadDef(task1, StartDefaultTask, osPriorityNormal, 0, 128);
   task1Handle = osThreadCreate(osThread(task1), NULL);
 
   /* definition and creation of task2 */
   osThreadDef(task2, StartTask02, osPriorityRealtime, 0, 512);
   task2Handle = osThreadCreate(osThread(task2), NULL);
+
+  /* definition and creation of taskMSG */
+  osThreadDef(taskMSG, StartTask03, osPriorityHigh, 0, 128);
+  taskMSGHandle = osThreadCreate(osThread(taskMSG), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -141,13 +147,10 @@ void StartDefaultTask(void const * argument)
 {
   /* USER CODE BEGIN StartDefaultTask */
   /* Infinite loop */
-  for(;;)
-  {
-		    RemoteData_t RDMsg;
-        RemoteDataMsg_Process(&RDMsg);
-        osMessagePut(queue1Handle, (uint32_t)&RDMsg, 0);
-    osDelay(10);
-  }
+   for(;;)
+	{
+	 osDelay(10);
+	}
   /* USER CODE END StartDefaultTask */
 }
 
@@ -158,14 +161,13 @@ void StartDefaultTask(void const * argument)
 * @retval None
 */
 /* USER CODE END Header_StartTask02 */
-RemoteData_t tmp;
 void StartTask02(void const * argument)
 {
   /* USER CODE BEGIN StartTask02 */
 	/* pid初始化*/
 	 RemoteData_t *RDMsg;
+	 Chassis_Init();
   /* Infinite loop */
-
   for(;;)
   {
 		/*pid更新*/
@@ -173,12 +175,36 @@ void StartTask02(void const * argument)
 		if(evt.status == osEventMessage)
 		{
 				RDMsg = (RemoteData_t*)evt.value.v;
-        tmp = *RDMsg;
+//        tmp = *RDMsg;
 		} 
 		Chassis_Process(*RDMsg);
     osDelay(1);
   }
   /* USER CODE END StartTask02 */
+}
+
+/* USER CODE BEGIN Header_StartTask03 */
+/**
+* @brief Function implementing the taskMSG thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartTask03 */
+void StartTask03(void const * argument)
+{
+  /* USER CODE BEGIN StartTask03 */
+  /* Infinite loop */
+
+	for(;;)
+  {
+			RemoteData_t RDMsg;
+      RemoteDataMsg_Process(&RDMsg);
+      osMessagePut(queue1Handle, (uint32_t)&RDMsg, 0);
+			osDelay(10);
+  }
+
+
+  /* USER CODE END StartTask03 */
 }
 
 /* Private application code --------------------------------------------------*/

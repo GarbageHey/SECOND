@@ -33,7 +33,3 @@ can_usart\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.
 can_usart\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 can_usart\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 can_usart\stm32f4xx_it.o: ../Core/Inc/stm32f4xx_it.h
-can_usart\stm32f4xx_it.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
-can_usart\stm32f4xx_it.o: ..\ADD\include\tim.h
-can_usart\stm32f4xx_it.o: ..\ADD\include\main.h
-can_usart\stm32f4xx_it.o: ../Core/Inc/usart.h

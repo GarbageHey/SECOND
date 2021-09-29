@@ -62,7 +62,7 @@ can_usart\chasis.o: ..\ADD\include\oled.h
 can_usart\chasis.o: ..\ADD\include\i2c.h
 can_usart\chasis.o: ..\ADD\include\key.h
 can_usart\chasis.o: ..\ADD\include\gpio.h
-can_usart\chasis.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
+can_usart\chasis.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/freertos.h
 can_usart\chasis.o: ../Core/Inc/FreeRTOSConfig.h
 can_usart\chasis.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
 can_usart\chasis.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h
